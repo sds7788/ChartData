@@ -1,0 +1,123 @@
+# ==================================================
+# Automated Chart and Q&A Generation Task Configuration (Expanded & Rebalanced)
+# ==================================================
+# Define all tasks to be generated here.
+# Each task is an entry with three keys:
+#   - topic: The core theme of the chart (string, English)
+#   - domain: The knowledge domain of the topic (string, English)
+#   - chart_type: The type of chart (string).
+#     Supported types: bar, line, pie, scatter, area, radar, rose, gantt, combo_bar_line, heatmap, donut, stacked_bar, boxplot, percentage_stacked_bar, 
+#     renderer: 可选项为 'matplotlib', 'pyecharts'。如果省略，默认为 'matplotlib'。
+#     figsize, dpi: 仅对 matplotlib 有效。
+#     complexity_steps: 生成中间版本的数量
+# ==================================================
+
+## tasks.yaml
+
+# tasks.yaml
+# 用于验证三个生成器 (matplotlib, seaborn, pyecharts) 的测试任务列表
+tasks:
+  # --------------------------------------------------
+  # Demographics
+  # --------------------------------------------------
+  - topic: "Population of the 5 most populous countries"
+    domain: "Demographics"
+    chart_type: "bar"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Climate Science
+  # --------------------------------------------------
+  - topic: "Global average temperature change over the last 50 years"
+    domain: "Climate Science"
+    chart_type: "line"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Technology
+  # --------------------------------------------------
+  - topic: "Market share of different smartphone operating systems"
+    domain: "Technology"
+    chart_type: "pie"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Education
+  # --------------------------------------------------
+  - topic: "Relationship between hours of study and exam scores"
+    domain: "Education"
+    chart_type: "scatter"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Energy
+  # --------------------------------------------------
+  - topic: "Growth of renewable energy sources over time"
+    domain: "Energy"
+    chart_type: "area"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  - topic: "Changing proportion of different energy sources in a country's total energy consumption over years"
+    domain: "Energy"
+    chart_type: "percentage_stacked_bar"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Gaming
+  # --------------------------------------------------
+  - topic: "Comparison of stats of two different video game characters"
+    domain: "Gaming"
+    chart_type: "radar"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Meteorology
+  # --------------------------------------------------
+  - topic: "Frequency of winds from different directions"
+    domain: "Meteorology"
+    chart_type: "rose"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  - topic: "Monthly rainfall and average temperature"
+    domain: "Meteorology"
+    chart_type: "combo_bar_line"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Project Management
+  # --------------------------------------------------
+  - topic: "Timeline of a project"
+    domain: "Project Management"
+    chart_type: "gantt"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Finance
+  # --------------------------------------------------
+  - topic: "Correlation between different stock prices"
+    domain: "Finance"
+    chart_type: "heatmap"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  - topic: "Composition of a person's investment portfolio"
+    domain: "Finance"
+    chart_type: "donut"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Business
+  # --------------------------------------------------
+  - topic: "Sales of different product categories over several quarters"
+    domain: "Business"
+    chart_type: "stacked_bar"
+    renderer: "matplotlib"
+    complexity_steps: 1
+  # --------------------------------------------------
+  # Economics
+  # --------------------------------------------------
+  - topic: "Distribution of salaries for different job roles"
+    domain: "Economics"
+    chart_type: "boxplot"
+    renderer: "matplotlib"
+    complexity_steps: 1
+ 
