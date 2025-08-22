@@ -1,0 +1,190 @@
+{
+    "generation_info": {
+        "topic": "Forest Plot Comparing Therapeutic Effects of Several Drugs",
+        "domain": "Medical Research",
+        "chart_type": "forest_plot",
+        "renderer": "matplotlib",
+        "task_type": "single",
+        "timestamp": "20250822_185150",
+        "base_filename": "medical_research_forest_plot_matplotlib_20250822_185150"
+    },
+    "qa_pair": {
+        "question": "Among the drugs showing a statistically significant positive effect (lower confidence interval bound > 0), which one exhibits the highest lower bound of its 95% confidence interval, indicating the most reliably strong positive effect?",
+        "answer": "Drug C Study 3",
+        "relevance_reasoning": "To answer the question, one must first identify all studies where the lower bound of the 95% confidence interval is greater than 0, indicating a statistically significant positive effect. This filters the candidates to Drug A Study 1 (0.6), Drug C Study 3 (0.9), Drug E Study 5 (0.1), and Drug G Study 7 (0.7). Among these relevant studies, the one with the highest lower confidence interval bound is Drug C Study 3 (0.9), making it the most reliably strong positive effect. Therefore, these four studies are marked as relevant."
+    },
+    "source_data_annotated": {
+        "chart_type": "forest_plot",
+        "title": "Forest Plot Comparing Therapeutic Effects of Several Drugs",
+        "x_label": "Effect Size (Log Odds Ratio)",
+        "y_label": "Drug/Study",
+        "data": {
+            "x_categories": null,
+            "y_series": null,
+            "scatter_points": null,
+            "pie_data": null,
+            "radar_data": null,
+            "heatmap_data": null,
+            "statistical_data": null,
+            "histogram_data": null,
+            "three_d_bar_data": null,
+            "contour_data": null,
+            "forest_plot_data": {
+                "labels": [
+                    "Drug A Study 1",
+                    "Drug B Study 2",
+                    "Drug C Study 3",
+                    "Drug D Study 4",
+                    "Drug E Study 5",
+                    "Drug F Study 6",
+                    "Drug G Study 7",
+                    "Drug H Study 8"
+                ],
+                "effects": [
+                    0.8,
+                    0.1,
+                    1.2,
+                    -0.5,
+                    0.6,
+                    0.3,
+                    1.0,
+                    0.0
+                ],
+                "lower_ci": [
+                    0.6,
+                    -0.2,
+                    0.9,
+                    -0.8,
+                    0.1,
+                    -0.1,
+                    0.7,
+                    -0.3
+                ],
+                "upper_ci": [
+                    1.0,
+                    0.4,
+                    1.5,
+                    -0.2,
+                    1.1,
+                    0.7,
+                    1.3,
+                    0.3
+                ],
+                "is_relevant_for_answer": [
+                    true,
+                    false,
+                    true,
+                    false,
+                    true,
+                    false,
+                    true,
+                    false
+                ]
+            },
+            "waterfall_data": null,
+            "funnel_data": null,
+            "network_data": null,
+            "sankey_data": null,
+            "candlestick_data": null,
+            "gauge_data": null,
+            "word_cloud_data": null,
+            "calendar_heatmap_data": null,
+            "parallel_coordinates_data": null
+        },
+        "analysis": {
+            "question": "Among the drugs showing a statistically significant positive effect (lower confidence interval bound > 0), which one exhibits the highest lower bound of its 95% confidence interval, indicating the most reliably strong positive effect?",
+            "answer": "Drug C Study 3",
+            "relevance_reasoning": "To answer the question, one must first identify all studies where the lower bound of the 95% confidence interval is greater than 0, indicating a statistically significant positive effect. This filters the candidates to Drug A Study 1 (0.6), Drug C Study 3 (0.9), Drug E Study 5 (0.1), and Drug G Study 7 (0.7). Among these relevant studies, the one with the highest lower confidence interval bound is Drug C Study 3 (0.9), making it the most reliably strong positive effect. Therefore, these four studies are marked as relevant."
+        }
+    },
+    "generated_charts": [
+        {
+            "complexity_level": 0,
+            "filename": "medical_research_forest_plot_matplotlib_20250822_185150_complexity_0.png",
+            "data_used": {
+                "chart_type": "forest_plot",
+                "title": "Forest Plot Comparing Therapeutic Effects of Several Drugs",
+                "x_label": "Effect Size (Log Odds Ratio)",
+                "y_label": "Drug/Study",
+                "data": {
+                    "x_categories": null,
+                    "y_series": null,
+                    "scatter_points": null,
+                    "pie_data": null,
+                    "radar_data": null,
+                    "heatmap_data": null,
+                    "statistical_data": null,
+                    "histogram_data": null,
+                    "three_d_bar_data": null,
+                    "contour_data": null,
+                    "forest_plot_data": {
+                        "labels": [
+                            "Drug A Study 1",
+                            "Drug B Study 2",
+                            "Drug C Study 3",
+                            "Drug D Study 4",
+                            "Drug E Study 5",
+                            "Drug F Study 6",
+                            "Drug G Study 7",
+                            "Drug H Study 8"
+                        ],
+                        "effects": [
+                            0.8,
+                            0.1,
+                            1.2,
+                            -0.5,
+                            0.6,
+                            0.3,
+                            1.0,
+                            0.0
+                        ],
+                        "lower_ci": [
+                            0.6,
+                            -0.2,
+                            0.9,
+                            -0.8,
+                            0.1,
+                            -0.1,
+                            0.7,
+                            -0.3
+                        ],
+                        "upper_ci": [
+                            1.0,
+                            0.4,
+                            1.5,
+                            -0.2,
+                            1.1,
+                            0.7,
+                            1.3,
+                            0.3
+                        ],
+                        "is_relevant_for_answer": [
+                            true,
+                            false,
+                            true,
+                            false,
+                            true,
+                            false,
+                            true,
+                            false
+                        ]
+                    },
+                    "waterfall_data": null,
+                    "funnel_data": null,
+                    "network_data": null,
+                    "sankey_data": null,
+                    "candlestick_data": null,
+                    "gauge_data": null,
+                    "word_cloud_data": null,
+                    "calendar_heatmap_data": null,
+                    "parallel_coordinates_data": null
+                },
+                "analysis": {
+                    "question": "Among the drugs showing a statistically significant positive effect (lower confidence interval bound > 0), which one exhibits the highest lower bound of its 95% confidence interval, indicating the most reliably strong positive effect?",
+                    "answer": "Drug C Study 3",
+                    "relevance_reasoning": "To answer the question, one must first identify all studies where the lower bound of the 95% confidence interval is greater than 0, indicating a statistically significant positive effect. This filters the candidates to Drug A Study 1 (0.6), Drug C Study 3 (0.9), Drug E Study 5 (0.1), and Drug G Study 7 (0.7). Among these relevant studies, the one with the highest lower confidence interval bound is Drug C Study 3 (0.9), making it the most reliably strong positive effect. Therefore, these four studies are marked as relevant."
+                }
+            }
+        }
+    ]
+}

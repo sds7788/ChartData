@@ -3,158 +3,156 @@ from typing import List, Optional, Union, Tuple
 from pydantic import BaseModel, Field
 import datetime
 
-# --- 基础数据系列定义 ---
+# --- Basic Data Series Definitions (No changes here) ---
 class YSeries(BaseModel):
-    name: str = Field(..., description="数据系列的名称，例如 '公司A'。")
-    values: List[Optional[float]] = Field(..., description="与x_categories对应的数值列表，允许空值。")
-    type: Optional[str] = Field(None, description="系列类型，用于组合图，例如 'bar' 或 'line'。")
-    ci_lower: Optional[List[Optional[float]]] = Field(None, description="置信区间的下界列表。")
-    ci_upper: Optional[List[Optional[float]]] = Field(None, description="置信区间的上界列表。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此数据系列是否是回答问题的关键。")
+    name: str = Field(..., description="Name of the data series, e.g., 'Company A'.")
+    values: List[Optional[float]] = Field(..., description="List of numerical values corresponding to x_categories, nulls are allowed.")
+    type: Optional[str] = Field(None, description="Type of the series for combo charts, e.g., 'bar' or 'line'.")
+    ci_lower: Optional[List[Optional[float]]] = Field(None, description="List of lower bounds for the confidence interval.")
+    ci_upper: Optional[List[Optional[float]]] = Field(None, description="List of upper bounds for the confidence interval.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if this data series is key to answering the question.")
 
 class ScatterPoint(BaseModel):
-    x: float = Field(..., description="散点图数据点的x坐标。")
-    y: float = Field(..., description="散点图数据点的y坐标。")
-    size: Optional[float] = Field(50, description="散点的大小（用于气泡图）。")
-    color_value: Optional[float] = Field(0, description="用于颜色映射的数值。")
-    x_error: Optional[float] = Field(None, description="X轴方向的误差值。")
-    y_error: Optional[float] = Field(None, description="Y轴方向的误差值。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此散点是否是回答问题的关键。")
+    x: float = Field(..., description="The x-coordinate of the data point for a scatter plot.")
+    y: float = Field(..., description="The y-coordinate of the data point for a scatter plot.")
+    size: Optional[float] = Field(50, description="The size of the scatter point (for bubble charts).")
+    color_value: Optional[float] = Field(0, description="A numerical value used for color mapping.")
+    x_error: Optional[float] = Field(None, description="The error value in the X-axis direction.")
+    y_error: Optional[float] = Field(None, description="The error value in the Y-axis direction.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if this scatter point is key to answering the question.")
 
 class PieData(BaseModel):
-    labels: List[str] = Field(..., description="饼图、圆环图或旭日图每个扇区的标签。")
-    values: List[float] = Field(..., description="每个扇区的数值。")
-    parents: Optional[List[str]] = Field(None, description="用于旭日图和树状图，表示层级关系的父节点标签列表。空字符串''表示根节点。")
-    explode: Optional[List[float]] = Field(None, description="一个可选的列表，用于指定哪些扇区需要从中心突出显示。")
-    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="一个布尔值列表，标记每个扇区是否是回答问题的关键。")
+    labels: List[str] = Field(..., description="Labels for each sector of a pie, donut, or sunburst chart.")
+    values: List[float] = Field(..., description="Numerical values for each sector.")
+    parents: Optional[List[str]] = Field(None, description="For sunburst and treemaps, a list of parent labels indicating hierarchy. An empty string '' denotes the root.")
+    explode: Optional[List[float]] = Field(None, description="An optional list to specify which sectors should be pulled out from the center.")
+    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="A boolean list marking whether each sector is key to answering the question.")
 
 class RadarSeries(BaseModel):
-    name: str = Field(..., description="雷达图数据系列的名称。")
-    values: List[float] = Field(..., description="雷达图每个轴上的数值。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此数据系列是否是回答问题的关键。")
+    name: str = Field(..., description="Name of the data series for a radar chart.")
+    values: List[float] = Field(..., description="Numerical values for each axis of the radar chart.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if this data series is key to answering the question.")
 
 class RadarData(BaseModel):
-    labels: List[str] = Field(..., description="雷达图各个轴的标签。")
-    series: List[RadarSeries] = Field(..., description="雷达图的数据系列列表。")
+    labels: List[str] = Field(..., description="Labels for each axis of the radar chart.")
+    series: List[RadarSeries] = Field(..., description="A list of data series for the radar chart.")
 
 class HistogramData(BaseModel):
-    values: List[float] = Field(..., description="用于生成直方图的原始数据列表。")
-    bins: Optional[int] = Field(None, description="直方图的箱数（区间数）。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此分布的整体或特定部分是否是回答问题的关键。")
+    values: List[float] = Field(..., description="A list of raw data to generate the histogram.")
+    bins: Optional[int] = Field(None, description="The number of bins (intervals) for the histogram.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if the overall distribution or a specific part of it is key to answering the question.")
 
 class ThreeDBarData(BaseModel):
-    x_categories: List[str] = Field(..., description="3D柱状图的X轴类别。")
-    y_categories: List[str] = Field(..., description="3D柱状图的Y轴类别。")
-    z_values: List[List[float]] = Field(..., description="一个二维列表（矩阵），表示每个(X, Y)点对应的Z轴高度。")
-    relevant_cells: Optional[List[List[int]]] = Field(None, description="回答问题所需关键单元格的坐标列表，格式为 [[row_index, col_index], ...]。")
+    x_categories: List[str] = Field(..., description="Categories for the X-axis of the 3D bar chart.")
+    y_categories: List[str] = Field(..., description="Categories for the Y-axis of the 3D bar chart.")
+    z_values: List[List[float]] = Field(..., description="A 2D list (matrix) representing the Z-axis height for each (X, Y) point.")
+    relevant_cells: Optional[List[List[int]]] = Field(None, description="A list of coordinates for key cells required to answer the question, format: [[row_index, col_index], ...].")
 
 class StatisticalPlotData(BaseModel):
-    categories: List[str] = Field(..., description="箱形图、小提琴图或带状图的分类标签。")
-    data_series: List[List[float]] = Field(..., description="每个类别对应的数据点列表的列表。")
-    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="一个布尔值列表，标记每个类别是否是回答问题的关键。")
+    categories: List[str] = Field(..., description="Category labels for a box plot, violin plot, or strip plot.")
+    data_series: List[List[float]] = Field(..., description="A list of lists, where each inner list contains data points for the corresponding category.")
+    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="A boolean list marking whether each category is key to answering the question.")
 
 class WaterfallData(BaseModel):
-    labels: List[str] = Field(..., description="瀑布图中每个条目的标签。")
-    values: List[float] = Field(..., description="每个条目的数值变化（正数表示增加，负数表示减少）。")
-    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="标记每个条目是否是回答问题的关键。")
+    labels: List[str] = Field(..., description="Labels for each item in the waterfall chart.")
+    values: List[float] = Field(..., description="The value change for each item (positive for increase, negative for decrease).")
+    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="Marks whether each item is key to answering the question.")
 
 class ContourData(BaseModel):
-    x_grid: List[float] = Field(..., description="X轴的网格点坐标。")
-    y_grid: List[float] = Field(..., description="Y轴的网格点坐标。")
-    z_values: List[List[float]] = Field(..., description="对应于(X, Y)网格的Z值矩阵。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此等高线图的特定区域或趋势是否是回答问题的关键。")
+    x_grid: List[float] = Field(..., description="Grid point coordinates for the X-axis.")
+    y_grid: List[float] = Field(..., description="Grid point coordinates for the Y-axis.")
+    z_values: List[List[float]] = Field(..., description="A matrix of Z-values corresponding to the (X, Y) grid.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if a specific area or trend in this contour plot is key to answering the question.")
 
 class NetworkNode(BaseModel):
-    id: str = Field(..., description="节点的唯一标识符。")
-    label: Optional[str] = Field(None, description="节点显示的标签，如果为None则使用id。")
-    size: Optional[float] = Field(100, description="节点的大小。")
-    group: Optional[Union[str, int]] = Field(None, description="节点所属的分组，可用于着色。")
+    id: str = Field(..., description="Unique identifier for the node.")
+    label: Optional[str] = Field(None, description="The display label for the node; if None, the id is used.")
+    size: Optional[float] = Field(100, description="The size of the node.")
+    group: Optional[Union[str, int]] = Field(None, description="The group to which the node belongs, can be used for coloring.")
 
 class NetworkEdge(BaseModel):
-    source: str = Field(..., description="边的起始节点的id。")
-    target: str = Field(..., description="边的目标节点的id。")
-    weight: Optional[float] = Field(1.0, description="边的权重。")
+    source: str = Field(..., description="The id of the starting node of the edge.")
+    target: str = Field(..., description="The id of the target node of the edge.")
+    weight: Optional[float] = Field(1.0, description="The weight of the edge.")
 
 class NetworkData(BaseModel):
-    nodes: List[NetworkNode] = Field(..., description="网络图的节点列表。")
-    edges: List[NetworkEdge] = Field(..., description="网络图的边列表。")
+    nodes: List[NetworkNode] = Field(..., description="A list of nodes for the network diagram.")
+    edges: List[NetworkEdge] = Field(..., description="A list of edges for the network diagram.")
 
 class ForestPlotData(BaseModel):
-    labels: List[str] = Field(..., description="每个研究或条目的标签。")
-    effects: List[float] = Field(..., description="效应量（点估计值）。")
-    lower_ci: List[float] = Field(..., description="置信区间的下界。")
-    upper_ci: List[float] = Field(..., description="置信区间的上界。")
-    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="标记每个研究结果是否是回答问题的关键。")
+    labels: List[str] = Field(..., description="Labels for each study or item.")
+    effects: List[float] = Field(..., description="The effect size (point estimate).")
+    lower_ci: List[float] = Field(..., description="The lower bound of the confidence interval.")
+    upper_ci: List[float] = Field(..., description="The upper bound of the confidence interval.")
+    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="Marks whether each study result is key to answering the question.")
 
 class FunnelData(BaseModel):
-    stages: List[str] = Field(..., description="漏斗图的各个阶段名称。")
-    values: List[float] = Field(..., description="每个阶段对应的数值。")
-    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="标记每个阶段是否是回答问题的关键。")
+    stages: List[str] = Field(..., description="The names of the stages in the funnel chart.")
+    values: List[float] = Field(..., description="The numerical value corresponding to each stage.")
+    is_relevant_for_answer: Optional[List[bool]] = Field(None, description="Marks whether each stage is key to answering the question.")
 
 class HeatmapData(BaseModel):
-    x_labels: List[str] = Field(..., description="热力图X轴的标签。")
-    y_labels: List[str] = Field(..., description="热力图Y轴的标签。")
-    values: List[List[float]] = Field(..., description="热力图的二维数值矩阵。")
-    relevant_cells: Optional[List[List[int]]] = Field(None, description="回答问题所需关键单元格的坐标列表。")
+    x_labels: List[str] = Field(..., description="Labels for the X-axis of the heatmap.")
+    y_labels: List[str] = Field(..., description="Labels for the Y-axis of the heatmap.")
+    values: List[List[float]] = Field(..., description="The 2D numerical matrix for the heatmap.")
+    relevant_cells: Optional[List[List[int]]] = Field(None, description="A list of coordinates for key cells required to answer the question.")
 
 class SankeyLink(BaseModel):
-    source: str = Field(..., description="流量来源节点的标签。")
-    target: str = Field(..., description="流量目标节点的标签。")
-    value: float = Field(..., description="流量的数值大小。")
+    source: str = Field(..., description="The label of the source node for the flow.")
+    target: str = Field(..., description="The label of the target node for the flow.")
+    value: float = Field(..., description="The numerical size of the flow.")
 
 class SankeyData(BaseModel):
-    nodes: List[str] = Field(..., description="桑基图中所有节点的唯一标签列表。")
-    links: List[SankeyLink] = Field(..., description="定义节点之间流量关系的链接列表。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此流动关系是否是回答问题的关键。")
+    nodes: List[str] = Field(..., description="A list of unique labels for all nodes in the Sankey diagram.")
+    links: List[SankeyLink] = Field(..., description="A list of links defining the flow relationships between nodes.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if this flow relationship is key to answering the question.")
 
 class CandlestickRecord(BaseModel):
-    time: Union[str, datetime.date] = Field(..., description="时间点或日期。")
-    open: float = Field(..., description="开盘价。")
-    high: float = Field(..., description="最高价。")
-    low: float = Field(..., description="最低价。")
-    close: float = Field(..., description="收盘价。")
+    time: Union[str, datetime.date] = Field(..., description="The time point or date.")
+    open: float = Field(..., description="The opening price.")
+    high: float = Field(..., description="The highest price.")
+    low: float = Field(..., description="The lowest price.")
+    close: float = Field(..., description="The closing price.")
 
 class CandlestickData(BaseModel):
-    records: List[CandlestickRecord] = Field(..., description="K线图的时间序列记录。")
-    is_relevant_for_answer: Optional[bool] = Field(False, description="此价格趋势是否是回答问题的关键。")
+    records: List[CandlestickRecord] = Field(..., description="A time-series list of records for the candlestick chart.")
+    is_relevant_for_answer: Optional[bool] = Field(False, description="Indicates if this price trend is key to answering the question.")
 
-# --- 【重要】修改点 1 ---
 class GaugeRange(BaseModel):
-    """定义仪表盘中的一个颜色范围。"""
-    start: float = Field(..., description="范围的起始值。")
-    end: float = Field(..., description="范围的结束值。")
-    color: str = Field(..., description="范围的颜色。")
+    """Defines a color range in the gauge chart."""
+    start: float = Field(..., description="The starting value of the range.")
+    end: float = Field(..., description="The ending value of the range.")
+    color: str = Field(..., description="The color of the range.")
 
 class GaugeData(BaseModel):
-    value: float = Field(..., description="仪表盘指针指向的当前数值。")
-    min_value: float = Field(0, description="仪表盘的最小值。")
-    max_value: float = Field(100, description="仪表盘的最大值。")
-    title: Optional[str] = Field(None, description="显示在仪表盘下方的标题。")
-    # 使用对象列表替代元组列表
-    ranges: Optional[List[GaugeRange]] = Field(None, description="定义不同区间的对象列表。")
-# --- 修改结束 ---
+    value: float = Field(..., description="The current value the gauge pointer indicates.")
+    min_value: float = Field(0, description="The minimum value of the gauge.")
+    max_value: float = Field(100, description="The maximum value of the gauge.")
+    title: Optional[str] = Field(None, description="The title displayed below the gauge.")
+    ranges: Optional[List[GaugeRange]] = Field(None, description="A list of objects defining different ranges.")
 
 class WordCloudEntry(BaseModel):
-    word: str = Field(..., description="词语。")
-    weight: float = Field(..., description="词语的权重或频率。")
+    word: str = Field(..., description="The word.")
+    weight: float = Field(..., description="The weight or frequency of the word.")
 
 class WordCloudData(BaseModel):
-    entries: List[WordCloudEntry] = Field(..., description="词云图的数据条目列表。")
+    entries: List[WordCloudEntry] = Field(..., description="A list of data entries for the word cloud.")
 
 class DateValueEntry(BaseModel):
-    """用于表示单个日期及其对应数值的条目。"""
-    date: datetime.date = Field(..., description="日期")
-    value: float = Field(..., description="该日期的数值")
+    """An entry representing a single date and its corresponding value."""
+    date: datetime.date = Field(..., description="The date.")
+    value: float = Field(..., description="The value for that date.")
 
 class CalendarHeatmapData(BaseModel):
-    """日历热力图的数据结构。"""
-    entries: List[DateValueEntry] = Field(..., description="一个日期-数值对的列表，替代了原有的字典结构。")
+    """Data structure for a calendar heatmap."""
+    entries: List[DateValueEntry] = Field(..., description="A list of date-value pairs, replacing the previous dictionary structure.")
 
 class ParallelCoordinatesData(BaseModel):
-    dimensions: List[str] = Field(..., description="平行坐标图的维度（坐标轴）列表。")
-    data_records: List[List[float]] = Field(..., description="数据记录列表，每个子列表中的值与维度一一对应。")
-    group_by: Optional[List[str]] = Field(None, description="用于给线条着色的类别标签列表，长度与data_records相同。")
+    dimensions: List[str] = Field(..., description="A list of dimensions (axes) for the parallel coordinates plot.")
+    data_records: List[List[float]] = Field(..., description="A list of data records, where each sublist's values correspond to the dimensions.")
+    group_by: Optional[List[str]] = Field(None, description="A list of category labels for coloring the lines, same length as data_records.")
 
+# --- Common Building Blocks ---
 class ChartSpecificData(BaseModel):
     x_categories: Optional[List[str]] = Field(None)
     y_series: Optional[List[YSeries]] = Field(None)
@@ -178,14 +176,30 @@ class ChartSpecificData(BaseModel):
     parallel_coordinates_data: Optional[ParallelCoordinatesData] = Field(None)
 
 class Analysis(BaseModel):
-    question: str = Field(..., description="一个基于生成数据的、有深度的问题。")
-    answer: str = Field(..., description="对问题的简洁、确切的答案。")
-    relevance_reasoning: str = Field(..., description="解释为什么被标记为'relevant'的数据是回答该问题的充分必要条件。")
+    question: str = Field(..., description="An insightful question based on the generated data.")
+    answer: str = Field(..., description="A concise and direct answer to the question.")
+    relevance_reasoning: str = Field(..., description="An explanation of why the data marked as 'relevant' is necessary and sufficient to answer the question.")
 
-class ChartData(BaseModel):
-    chart_type: str = Field(..., description="图表的具体类型。")
-    title: str = Field(..., description="图表的标题。")
-    x_label: Optional[str] = Field(None)
-    y_label: Optional[str] = Field(None)
-    data: ChartSpecificData = Field(..., description="包含图表所有数据的容器。")
-    analysis: Analysis = Field(..., description="基于图表数据的问答分析。")
+# --- 【NEW】Schema for Single Plot Charts ---
+class SingleChartData(BaseModel):
+    chart_type: str = Field(..., description="The specific type of the chart.")
+    title: str = Field(..., description="The title of the chart.")
+    x_label: Optional[str] = Field(None, description="Label for the X-axis.")
+    y_label: Optional[str] = Field(None, description="Label for the Y-axis.")
+    data: ChartSpecificData = Field(..., description="A container for all the data for the chart.")
+    analysis: Analysis = Field(..., description="A question-and-answer analysis based on the chart data.")
+
+# --- 【NEW】Schema for Faceted (Multi-Plot) Charts ---
+class FacetData(BaseModel):
+    """Defines the data for a single subplot (facet)."""
+    facet_value: str = Field(..., description="The value of the facet this subplot represents, e.g., 'North America' or 'Male'.")
+    data: ChartSpecificData = Field(..., description="The specific data for the chart in this facet.")
+
+class FacetChartData(BaseModel):
+    chart_type: str = Field(..., description="The specific type of the chart.")
+    title: str = Field(..., description="The overall title for the faceted chart display.")
+    x_label: Optional[str] = Field(None, description="Common label for the X-axis across all subplots.")
+    y_label: Optional[str] = Field(None, description="Common label for the Y-axis across all subplots.")
+    facet_by: str = Field(..., description="The field name used for faceting, e.g., 'Region'.")
+    facet_data: List[FacetData] = Field(..., description="A list of data for generating faceted subplots.")
+    analysis: Analysis = Field(..., description="A question-and-answer analysis based on the overall chart data.")
