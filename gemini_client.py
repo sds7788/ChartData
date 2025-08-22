@@ -23,6 +23,7 @@ class GeminiClient:
         """
         # 严格按照您的要求，使用 genai.Client 进行初始化
         self.client = genai.Client(api_key=api_key)
+        self.api_key = api_key  # 【修复】将api_key保存为实例的属性
         self.model_name: str = model_name
 
     def _build_prompt(self, topic: str, knowledge_domain: str, chart_type: str) -> str:
