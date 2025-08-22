@@ -13,7 +13,7 @@ class GeminiClient:
     一个封装了与Google Gemini API交互的客户端类。
     此版本已更新，以使用最新的`client.generate_content`和`generation_config`方法。
     """
-    def __init__(self, api_key: str, model_name: str = "gemini-2.5-pro"):
+    def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash"):
         """
         初始化客户端，配置API密钥和模型。
 
@@ -68,15 +68,17 @@ class GeminiClient:
         You are a world-class expert in the {knowledge_domain} field, specializing in advanced data analysis and visualization.
 
         Your task is to follow these steps strictly:
-        1.Generate a Complex Dataset: First, create a complex and extensive dataset for a "{chart_type}" chart centered around the topic of "{topic}". The dataset must be highly intricate but don't impact visualizationand meet the following requirements:
-            a.Entity Count: Include at least 12-15 distinct entities (e.g., companies, countries, products) to ensure high complexity and a rich visualization.
-            b.Data Dimensions: For each entity, generate multi-dimensional data across at least 5-7 distinct metrics.
+        1.Generate a Complex Dataset: First, create a complex and extensive dataset for a "{chart_type}" chart centered around the topic of "{topic}". The dataset must be intricate but don't impact visualizationand meet the following requirements:
+            a.Entity Count: Include at least 7-9 distinct entities (e.g., companies, countries, products) to ensure high complexity and a rich visualization.
+            b.Data Dimensions: For each entity, generate multi-dimensional data across at least 4-6 distinct metrics.
             c.Subtle Correlations: The internal relationships and correlations within the data must be subtle, non-linear, and multi-dimensional. They should not be immediately obvious and should require deep exploration of the chart to be discovered.
         2.Formulate a Challenging Question: Based on the dataset you generated, pose a highly challenging analytical question that demands a nuanced interpretation of the complex relationships within the chart, going beyond simple data retrieval.
-        3.Provide a Definitive Answer: Provide a concise and definitive answer to your question. The answer must be a specific value, entity name, or year that is directly and unambiguously derivable from the dataset.
+        3.Provide clear answers: Please provide clear and concise answers to your questions. The answer must be concise, such as a noun, a number, a year, etc.
         4.Identify and Annotate Core Evidence: This is a critical step. Review your question and answer, and precisely identify the "minimum necessary data subset" required to answer the question. Then, in the final JSON output, you must use the is_relevant_for_answer field (or relevant_cells for heatmaps) to mark only this minimum subset. All other irrelevant data points must have this field set to false.
         5.Explain the Reasoning for Annotation: In the analysis.relevance_reasoning field, clearly explain why the marked data is the sufficient and necessary condition to answer the question.
 
+        Please note that the most important thing is to keep your answer concise!
+        
         Your entire response must be a single, raw JSON object that strictly adheres to the JSON Schema I provide. Do not include any introductory or explanatory text, code block markers, or any other characters before or after the JSON object itself.
         """
         
