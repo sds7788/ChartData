@@ -1,0 +1,344 @@
+# tasks.yaml
+# A curated task list specifically for testing the SeabornGenerator.
+# It includes tasks for Seaborn-native charts and those that fall back to Matplotlib.
+
+tasks:
+  # ===================================================================
+  # Part 1: Testing Seaborn's Native Charting Capabilities (Single Plot)
+  # ===================================================================
+  - topic: "Comparison of battery life across different smartphone models"
+    domain: "Consumer Electronics"
+    chart_type: "bar"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 155
+    complexity_steps: 3
+  - topic: "Monthly active users growth for a social media platform"
+    domain: "Web Analytics"
+    chart_type: "line"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 210
+    complexity_steps: 3
+  - topic: "Distribution of customer ages for an e-commerce store"
+    domain: "Retail Analytics"
+    chart_type: "histogram"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 280
+    complexity_steps: 3
+  - topic: "Analysis of housing prices in different neighborhoods"
+    domain: "Real Estate"
+    chart_type: "boxplot"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 120
+    complexity_steps: 3
+  - topic: "IMDb ratings distribution for different movie genres"
+    domain: "Film Industry"
+    chart_type: "violin"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 195
+    complexity_steps: 3
+  - topic: "Individual scores of students on a standardized test"
+    domain: "Education"
+    chart_type: "strip"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 250
+    complexity_steps: 3
+  - topic: "Projected vs. actual rainfall per month with confidence intervals"
+    domain: "Meteorology"
+    chart_type: "line_with_confidence_interval"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 175
+    complexity_steps: 3
+  - topic: "Correlation matrix of nutrient levels in different food samples"
+    domain: "Food Science"
+    chart_type: "heatmap"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 225
+    complexity_steps: 3
+  - topic: "Relationship between advertising spend and sales revenue"
+    domain: "Marketing Analytics"
+    chart_type: "scatter"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 140
+    complexity_steps: 3
+
+  # =================================================================
+  # Part 2: Testing Seaborn's Faceting Capabilities (Multi-Plot)
+  # =================================================================
+  - topic: "Sales of different product types, faceted by sales region"
+    domain: "Retail"
+    chart_type: "bar"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 265
+    complexity_steps: 3
+  - topic: "Stock price evolution over the last year, faceted by company"
+    domain: "Finance"
+    chart_type: "line"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 110
+    complexity_steps: 3
+  - topic: "Distribution of employee salaries, faceted by department"
+    domain: "Corporate Management"
+    chart_type: "histogram"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 185
+    complexity_steps: 3
+  - topic: "Patient recovery outcomes, faceted by treatment group"
+    domain: "Clinical Trials"
+    chart_type: "boxplot"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 290
+    complexity_steps: 3
+  - topic: "Fuel efficiency of vehicles, faceted by car class (e.g., SUV, Sedan)"
+    domain: "Automotive"
+    chart_type: "violin"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 130
+    complexity_steps: 3
+  - topic: "Server response times, faceted by data center location"
+    domain: "IT Operations"
+    chart_type: "strip"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 200
+    complexity_steps: 3
+  - topic: "Crop yield over seasons with confidence intervals, faceted by crop type"
+    domain: "Agriculture"
+    chart_type: "line_with_confidence_interval"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 270
+    complexity_steps: 3
+  - topic: "Gene expression levels, faceted by different experimental conditions"
+    domain: "Bioinformatics"
+    chart_type: "heatmap"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 160
+    complexity_steps: 3
+  - topic: "Relationship between years of experience and salary, faceted by industry"
+    domain: "Labor Economics"
+    chart_type: "scatter"
+    renderer: "seaborn"
+    task_type: "facet"
+    figsize: [12, 8]
+    dpi: 235
+    complexity_steps: 3
+
+  # =====================================================================
+  # Part 3: Testing Matplotlib Fallback Capabilities (Single Plot Only)
+  # =====================================================================
+  - topic: "Breakdown of energy sources for a country"
+    domain: "Energy Sector"
+    chart_type: "pie"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 105
+    complexity_steps: 3
+  - topic: "Composition of a mutual fund's assets"
+    domain: "Investment"
+    chart_type: "donut"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 150
+    complexity_steps: 3
+  - topic: "Sales conversion funnel for a new marketing campaign"
+    domain: "Sales Funnel Analysis"
+    chart_type: "funnel"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 215
+    complexity_steps: 3
+  - topic: "Changes in a company's net worth over a fiscal year"
+    domain: "Financial Reporting"
+    chart_type: "waterfall"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 285
+    complexity_steps: 3
+  - topic: "Contribution of different sectors to national GDP over time"
+    domain: "Macroeconomics"
+    chart_type: "stacked_area"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 125
+    complexity_steps: 3
+  - topic: "Total number of books published per year"
+    domain: "Publishing Industry"
+    chart_type: "area"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 190
+    complexity_steps: 3
+  - topic: "Revenue streams for a software company (SaaS, licenses, services)"
+    domain: "Business Revenue"
+    chart_type: "stacked_bar"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 260
+    complexity_steps: 3
+  - topic: "Political party affiliation by age group"
+    domain: "Political Science"
+    chart_type: "percentage_stacked_bar"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 145
+    complexity_steps: 3
+  - topic: "Meta-analysis of studies on the effectiveness of a teaching method"
+    domain: "Education Research"
+    chart_type: "forest_plot"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 205
+    complexity_steps: 3
+  - topic: "Comparing poll results from different sources with error margins"
+    domain: "Polling and Surveys"
+    chart_type: "scatter_with_error_bars"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 275
+    complexity_steps: 3
+  - topic: "Ocean salinity levels at different depths and temperatures"
+    domain: "Oceanography"
+    chart_type: "contour"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 115
+    complexity_steps: 3
+  - topic: "Citation network between scientific papers"
+    domain: "Bibliometrics"
+    chart_type: "network"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 180
+    complexity_steps: 3
+  - topic: "Flow of water through a regional water management system"
+    domain: "Environmental Engineering"
+    chart_type: "sankey"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 245
+    complexity_steps: 3
+  - topic: "Historical daily prices of a commodity (e.g., crude oil)"
+    domain: "Commodities Trading"
+    chart_type: "candlestick"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 135
+    complexity_steps: 3
+  - topic: "Customer satisfaction score (CSAT) gauge"
+    domain: "Customer Experience"
+    chart_type: "gauge"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 220
+    complexity_steps: 3
+  - topic: "Most frequent terms in customer reviews for a product"
+    domain: "Natural Language Processing"
+    chart_type: "word_cloud"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 295
+    complexity_steps: 3
+  - topic: "A student's attendance record over a school year"
+    domain: "Academic Tracking"
+    chart_type: "calendar_heatmap"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 165
+    complexity_steps: 3
+  - topic: "Comparing universities based on tuition, ranking, and student-faculty ratio"
+    domain: "Higher Education"
+    chart_type: "parallel_coordinates"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 240
+    complexity_steps: 3
+  - topic: "Performance review of an employee across key competencies"
+    domain: "Performance Management"
+    chart_type: "radar"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 102
+    complexity_steps: 3
+  - topic: "Website traffic by country and device type"
+    domain: "Digital Analytics"
+    chart_type: "3d_bar"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 170
+    complexity_steps: 3
+  - topic: "Breakdown of file types on a computer hard drive"
+    domain: "Data Management"
+    chart_type: "treemap"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 255
+    complexity_steps: 3
+  - topic: "Hierarchical view of a company's sales channels and sub-channels"
+    domain: "Sales Strategy"
+    chart_type: "sunburst"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 122
+    complexity_steps: 3
+  - topic: "Frequency of different weather types (sunny, cloudy, rainy) in a month"
+    domain: "Local Weather"
+    chart_type: "rose"
+    renderer: "seaborn"
+    task_type: "single"
+    figsize: [12, 8]
+    dpi: 208
+    complexity_steps: 3
