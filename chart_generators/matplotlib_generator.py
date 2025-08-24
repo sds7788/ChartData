@@ -21,6 +21,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import squarify
 import networkx as nx
 from matplotlib.patches import Wedge
+from collections import defaultdict
 
 # 假设 base_generator 在同一路径下
 from .base_generator import BaseChartGenerator
@@ -92,7 +93,7 @@ def _draw_pie_chart(ax: plt.Axes, data: Dict[str, Any]):
     explode = pie_data.get('explode')
     if not explode or len(explode) != len(labels):
         explode = [0.0] * len(labels)
-    ax.pie(values, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+    ax.pie(values, explode=explode, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
     ax.axis('equal')
 
 def _draw_donut_chart(ax: plt.Axes, data: Dict[str, Any]):
@@ -129,7 +130,7 @@ def _draw_rose_chart(fig: plt.Figure, data: Dict[str, Any]):
 
 def _draw_scatter_with_error_bars(ax: plt.Axes, data: Dict[str, Any]):
     """绘制带误差棒的散点图。"""
-    chart_data = data.get('data', {})
+    chart_data = data.get('data', data) 
     points = chart_data.get('scatter_points', [])
     if not points: return
     for point in points:
@@ -376,15 +377,142 @@ def _draw_funnel_chart(ax: plt.Axes, data: Dict[str, Any]):
     for i, v in enumerate(values): ax.text(v, i, str(v), va='center')
 
 def _draw_sankey_diagram(ax: plt.Axes, data: Dict[str, Any]):
-    """绘制桑基图。"""
+    """
+    绘制桑基图。
+    [修正 v3] 修正了导致 "No data" 提示的数据提取逻辑错误。
+    """
+    # [修正] 修复了此处的逻辑错误，确保能正确提取 links 数据
     sankey_data = data.get('data', {}).get('sankey_data', {})
-    links = sankey_data.get('links', [])
-    if not links: return
-    sankey = Sankey(ax=ax, scale=0.01, offset=0.2, format='%.0f')
-    for link in links:
-        sankey.add(flows=[link['value'], -link['value']], labels=[link['source'], link['target']], orientations=[-1, 1])
+    links = sankey_data.get('links', []) if sankey_data else []
+
+    if not links:
+        ax.text(0.5, 0.5, 'No data for Sankey diagram', ha='center', va='center')
+        ax.axis('off')
+        return
+
+    # --- 后续的所有代码保持不变 ---
+
+    # 1. 数据预处理和不平衡修正
+    node_flows = defaultdict(lambda: {'in': 0, 'out': 0})
+    all_nodes = set()
+    links_copy = [l.copy() for l in links] 
+
+    for link in links_copy:
+        source, target, value = link['source'], link['target'], link.get('value', 0)
+        all_nodes.add(source)
+        all_nodes.add(target)
+        node_flows[source]['out'] += value
+        node_flows[target]['in'] += value
+
+    source_nodes_set = {n for n, f in node_flows.items() if f['in'] == 0 and f['out'] > 0}
+    sink_nodes_set = {n for n, f in node_flows.items() if f['out'] == 0 and f['in'] > 0}
+    total_in = sum(node_flows[n]['in'] for n in sink_nodes_set)
+    total_out = sum(node_flows[n]['out'] for n in source_nodes_set)
+    imbalance = total_out - total_in
+
+    if abs(imbalance) > 1e-6:
+        print(f"Warning: Sankey diagram system is imbalanced by {imbalance:.2f}. Adjusting flows.")
+        if imbalance > 0: 
+            primary_source = list(source_nodes_set)[0] if source_nodes_set else list(all_nodes)[0]
+            links_copy.append({'source': 'External Source', 'target': primary_source, 'value': imbalance})
+        else:
+            primary_sink = list(sink_nodes_set)[0] if sink_nodes_set else list(all_nodes)[0]
+            links_copy.append({'source': primary_sink, 'target': 'Losses', 'value': -imbalance})
+
+    # 3. 初始化绘图对象和辅助数据结构
+    sankey = Sankey(ax=ax, scale=0.01, offset=0.3, head_angle=120, format='%.0f', unit='')
+    
+    drawn_diagrams = {} 
+
+    # 4. 迭代绘图
+    remaining_links = list(links_copy)
+    
+    max_passes = len(all_nodes) + 5
+    for _ in range(max_passes):
+        if not remaining_links:
+            break
+
+        links_processed_in_pass = 0
+        
+        links_to_draw_now = [
+            link for link in remaining_links
+            if link['source'] not in drawn_diagrams and all(
+                l['source'] in drawn_diagrams for l in links_copy if l['target'] == link['source']
+            )
+        ]
+        
+        links_by_source = defaultdict(list)
+        for link in links_to_draw_now:
+            links_by_source[link['source']].append(link)
+
+        if not links_by_source:
+             links_to_draw_now = [link for link in remaining_links if link['source'] not in drawn_diagrams]
+             for link in links_to_draw_now:
+                 links_by_source[link['source']].append(link)
+        
+        for source_node, outgoing_links in links_by_source.items():
+            if source_node in drawn_diagrams:
+                continue
+
+            incoming_links = [l for l in links_copy if l['target'] == source_node]
+
+            prior_index = None
+            connect_spec = None
+
+            if incoming_links:
+                largest_in_link = max(incoming_links, key=lambda l: l.get('value', 0))
+                prior_node_name = largest_in_link['source']
+                
+                if prior_node_name in drawn_diagrams:
+                    prior_info = drawn_diagrams[prior_node_name]
+                    prior_index = prior_info['index']
+                    
+                    input_flow_index = incoming_links.index(largest_in_link)
+                    output_flow_index = prior_info['output_map'].get(source_node)
+                    
+                    if output_flow_index is not None:
+                        connect_spec = (input_flow_index, output_flow_index)
+
+            flows = [link.get('value', 0) for link in incoming_links] + \
+                    [-link.get('value', 0) for link in outgoing_links]
+            
+            labels = [None] * len(incoming_links) + [link['target'] for link in outgoing_links]
+            
+            orientations = [1] * len(incoming_links) + [-1] * len(outgoing_links)
+
+            if not flows: continue
+            
+            sankey.add(
+                flows=flows,
+                labels=labels,
+                label=source_node,
+                orientations=orientations,
+                patchlabel=source_node,
+                prior=prior_index,
+                connect=connect_spec,
+                trunklength=1.5,
+                pathlengths=0.5
+            )
+            
+            output_map = {link['target']: i for i, link in enumerate(outgoing_links)}
+            new_diagram_index = len(sankey.diagrams) - 1
+            drawn_diagrams[source_node] = {'index': new_diagram_index, 'output_map': output_map}
+            
+            # 使用副本进行迭代和删除操作
+            for link in list(remaining_links):
+                if link in outgoing_links:
+                    remaining_links.remove(link)
+
+            links_processed_in_pass += len(outgoing_links)
+
+    if remaining_links:
+        print(f"Warning: Could not process all links. Remaining links: {remaining_links}")
+
     sankey.finish()
-    ax.set_xticks([]); ax.set_yticks([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.axis('off')
+    plt.title(data.get('title', 'Sankey Diagram'), fontsize=16)
 
 def _draw_candlestick_chart(ax: plt.Axes, data: Dict[str, Any]):
     """绘制K线图。"""

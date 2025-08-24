@@ -163,9 +163,9 @@ def evaluate_model(ground_truth_path, model_output_path, results_path):
 # --- 程序入口 ---
 if __name__ == '__main__':
     # 定义你的文件名
-    ground_truth_file = 'D:\桌面\ChartData\dataset\\train_dataset.json'
-    model_outputs_file = 'D:\桌面\ChartData\dataset\eva.json'
-    evaluation_results_file = 'D:\桌面\ChartData\dataset\eva_result.json'
+    ground_truth_file = 'D:\桌面\数据存储\dataset(1,20k)\\sampled_dataset_2000.json'
+    model_outputs_file = 'D:\桌面\数据存储\dataset(1,20k)\eva.json'
+    evaluation_results_file = 'D:\桌面\数据存储\dataset(1,20k)\eva_result.json'
 
     # 运行评估
     evaluate_model(ground_truth_file, model_outputs_file, evaluation_results_file)

@@ -73,12 +73,17 @@ class GeminiClient:
             a.Entity Count: Include at least 7-9 distinct entities (e.g., companies, countries, products) to ensure high complexity and a rich visualization.
             b.Data Dimensions: For each entity, generate multi-dimensional data across at least 4-6 distinct metrics.
             c.Subtle Correlations: The internal relationships and correlations within the data must be subtle, non-linear, and multi-dimensional. They should not be immediately obvious and should require deep exploration of the chart to be discovered.
-        2.Formulate a Challenging Question: Based on the dataset you generated, pose a highly challenging analytical question that demands a nuanced interpretation of the complex relationships within the chart, going beyond simple data retrieval.
-        3.Provide clear answers: Please provide clear and concise answers to your questions. The answer must be concise, such as a noun, a number, a year, etc.
+        2.Ask a Challenging Question: Based on the dataset you generated, formulate a challenging analytical question that requires careful interpretation of complex relationships within a chart, rather than simple data retrieval. The following options are available: 
+            a. The question should require 2-5 steps of reasoning to solve. 
+            b. Ask about mathematical operations (differences, percentages, ratios) between data elements. 
+            c. Focus on identifying patterns, extreme values, or anomalies in the data visualization. 
+            d. Include questions about the relationships between different data points or series.
+        3.Provide clear answers: Please provide clear and concise answers to your questions. The answer must be concise, such as a noun or a number or a year, etc.
         4.Identify and Annotate Core Evidence: This is a critical step. Review your question and answer, and precisely identify the "minimum necessary data subset" required to answer the question. Then, in the final JSON output, you must use the is_relevant_for_answer field (or relevant_cells for heatmaps) to mark only this minimum subset. All other irrelevant data points must have this field set to false.
         5.Explain the Reasoning for Annotation: In the analysis.relevance_reasoning field, clearly explain why the marked data is the sufficient and necessary condition to answer the question.
 
-        Please note that the most important thing is to keep your answer concise!
+        Please note that the most important thing is to keep your answer concise!No additional explanation is needed!
+        Be careful not to crowd the data points too closely together to avoid overlapping elements in the rendered chart.
         
         Your entire response must be a single, raw JSON object that strictly adheres to the JSON Schema I provide. Do not include any introductory or explanatory text, code block markers, or any other characters before or after the JSON object itself.
         """
@@ -139,7 +144,6 @@ class GeminiClient:
                 "response_schema": schema, # 直接传递Pydantic模型
                 }
             )
-            print(response.text)
             print("成功从Gemini接收到响应。")
             
             # 直接解析返回的JSON文本为Pydantic对象，然后转换为字典

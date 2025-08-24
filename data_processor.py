@@ -65,7 +65,7 @@ def create_chart_variations(full_chart_data: Dict[str, Any], total_versions: int
     simple_chart_types = {
         'pie', 'donut', 'funnel', 'waterfall', 'gauge', 'word_cloud', 
         'treemap', 'sunburst', 'forest', 'candlestick', 'sankey',
-        'calendar_heatmap', 'network', 'contour', '3d_bar'
+        'calendar_heatmap', 'network', 'contour', '3d_bar', 'percentage_stacked_bar',  'area', 'combo_bar_line'
     }
     if chart_type in simple_chart_types:
         print(f"  - 提示：图表类型 '{chart_type}' 不适合生成多复杂度版本，将只使用完整数据。")
@@ -80,7 +80,7 @@ def create_chart_variations(full_chart_data: Dict[str, Any], total_versions: int
     data_source = None
     flags = []
 
-    if chart_type in ['line', 'bar', 'stacked_bar', 'percentage_stacked_bar', 'stacked_area', 'area', 'combo_bar_line', 'line_with_confidence_interval']:
+    if chart_type in ['line', 'bar', 'stacked_bar', 'stacked_area','line_with_confidence_interval']:
         data_source = full_chart_data.get('data', {}).get('y_series', [])
         flags = [s.get('is_relevant_for_answer', False) for s in data_source]
     elif chart_type in ['scatter', 'scatter_with_error_bars']:
@@ -107,7 +107,7 @@ def create_chart_variations(full_chart_data: Dict[str, Any], total_versions: int
             indices_to_include = sorted(list(set(relevant_indices + indices_to_add)))
 
             # 根据图表类型，筛选数据
-            if chart_type in ['line', 'bar', 'stacked_bar', 'percentage_stacked_bar', 'stacked_area', 'area', 'combo_bar_line', 'line_with_confidence_interval']:
+            if chart_type in ['line', 'bar', 'stacked_bar', 'stacked_area', 'line_with_confidence_interval']:
                 current_data['data']['y_series'] = [data_source[j] for j in indices_to_include]
             elif chart_type in ['scatter', 'scatter_with_error_bars']:
                 current_data['data']['scatter_points'] = [data_source[j] for j in indices_to_include]

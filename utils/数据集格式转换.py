@@ -3,9 +3,9 @@ import os
 
 # --- 配置区 ---
 # 输入的原始数据集文件名
-input_file = 'D:\\桌面\\ChartData\\dataset\\train_dataset.json'
+input_file = 'D:\\桌面\\数据存储\\dataset(1,20k)\\dataset.json'
 # 输出的目标文件名
-output_file = 'D:\\桌面\\ChartData\\dataset\\train.json'
+output_file = 'D:\\桌面\\数据存储\\dataset(1,20k)\\train_dataset.json'
 # 生成的图片路径前缀 (根据您的目录结构，'images/' 是最合适的相对路径)
 # 如果您需要截图中的绝对路径样式，可以修改为 "data/chart/my/train/images/"
 IMAGE_PATH_PREFIX = 'images/' 

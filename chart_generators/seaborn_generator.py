@@ -84,12 +84,14 @@ class SeabornGenerator(BaseChartGenerator):
         fig = None
         facet_data = self.chart_package.get('facet_data')
         
-        unsupported_facet_types = [
+        matplotlib_fallback_types = [
             'pie', 'donut', 'radar', 'rose', '3d_bar', 'sunburst', 'treemap', 'waterfall',
-            'contour', 'network', 'forest', 'funnel', 'sankey', 'candlestick', 
+            'contour', 'network', 'forest_plot', 'forest', 'funnel', 'sankey', 'candlestick', 
             'gauge', 'word_cloud', 'calendar_heatmap', 'parallel_coordinates'
         ]
-        if self.chart_type in unsupported_facet_types:
+
+        unsupported_facet_fallback = {'radar', 'rose', '3d_bar', 'contour', 'sankey', 'network', 'gauge', 'word_cloud', 'calendar_heatmap'}
+        if self.chart_type in unsupported_facet_fallback:
             print(f"警告：图表类型 '{self.chart_type}' (Matplotlib回退) 不支持多子图渲染，将只渲染第一个分面的数据。")
             self.chart_package['data'] = facet_data[0]['data']
             return self._create_single_chart(output_path, figsize, dpi)
@@ -105,10 +107,40 @@ class SeabornGenerator(BaseChartGenerator):
             fig, axes = plt.subplots(rows, cols, figsize=(fig_width, fig_height), dpi=dpi, squeeze=False)
             axes_flat = axes.flatten()
 
+            use_matplotlib_fallback = self.chart_type in matplotlib_fallback_types
+
             for i, facet_item in enumerate(facet_data):
                 ax = axes_flat[i]
                 subplot_package = {'data': facet_item.get('data', {})}
-                self._draw_subplot(ax, subplot_package)
+                
+                if use_matplotlib_fallback:
+                    # --- 代码修正处 ---
+                    # 创建一个从图表类型到其 Matplotlib 绘图函数的映射
+                    fallback_function_map = {
+                        'pie': _draw_pie_chart,
+                        'donut': _draw_donut_chart,
+                        'sunburst': _draw_sunburst_chart,
+                        'treemap': _draw_treemap,
+                        'waterfall': _draw_waterfall_chart,
+                        'forest_plot': _draw_forest_plot,
+                        'forest': _draw_forest_plot,
+                        'funnel': _draw_funnel_chart,
+                        'candlestick': _draw_candlestick_chart,
+                        'parallel_coordinates': _draw_parallel_coordinates
+                        # 其他需要 fig 对象的类型已在 unsupported_facet_fallback 中被过滤
+                    }
+
+                    # 查找并调用对应的绘图函数
+                    draw_func = fallback_function_map.get(self.chart_type)
+                    if draw_func:
+                        draw_func(ax, subplot_package)
+                    else:
+                        # 如果映射中没有找到，则显示原始的回退信息
+                        ax.text(0.5, 0.5, f'Matplotlib fallback for\n"{self.chart_type}"\nnot implemented for facets', ha='center', va='center')
+                else:
+                    # 使用原有的Seaborn绘图逻辑
+                    self._draw_subplot(ax, subplot_package)
+                
                 ax.set_title(facet_item.get('facet_value', ''))
             
             for j in range(num_facets, len(axes_flat)):
@@ -124,7 +156,7 @@ class SeabornGenerator(BaseChartGenerator):
             return False
         finally:
             if fig: plt.close(fig)
-
+            
     def _draw_subplot(self, ax: plt.Axes, data_package: Dict[str, Any]):
         """
         在指定的ax上绘制一个子图。
@@ -144,8 +176,19 @@ class SeabornGenerator(BaseChartGenerator):
                 for series_name in df['series'].unique():
                     series_df = df[df['series'] == series_name]
                     ax.fill_between(series_df['x'], series_df['y'], alpha=0.3)
+        
+        # 【修正】将 'scatter_with_error_bars' 添加到处理逻辑中
         elif self.chart_type == 'scatter':
             sns.scatterplot(data=df, x='x', y='y', size='size', hue='color_value', sizes=(50, 500), ax=ax, palette='viridis')
+        elif self.chart_type == 'scatter_with_error_bars':
+            # 使用 matplotlib 的 errorbar 函数直接在 ax 上绘图
+            ax.errorbar(x=df['x'], y=df['y'],
+                        yerr=df.get('y_error'), # 使用 y_error 列
+                        xerr=df.get('x_error'), # 使用 x_error 列
+                        fmt='o',  # 'o' 表示绘制点
+                        capsize=5, # 误差线端点的帽子长度
+                        linestyle='None') # 不连接数据点
+
         elif self.chart_type == 'histogram':
             sns.histplot(data=df, x='values', bins=data_package.get('data', {}).get('histogram_data', {}).get('bins', 'auto'), ax=ax, kde=True)
         elif self.chart_type == 'heatmap':

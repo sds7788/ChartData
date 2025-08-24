@@ -1,35 +1,33 @@
 角色： 你是一个数据生成专家。
-
 任务： 请为我创建一个名为 tasks.yaml 的 YAML 格式文件，用于配置图表生成任务。
-
 具体要求如下：
-
 文件结构：
-
 文件根部有一个名为 tasks 的键。
-
-tasks 的值是一个包含 3000 个任务对象的列表。
-
+tasks 的值是一个包含 1000 个任务对象的列表。
 每个任务对象的结构和规则：
-
 topic: 一个用英文描述的、多样化的图表主题。
-
 domain: 一个与主题相关的、更广泛的英文领域。请确保 topic 和 domain 的组合丰富多样，覆盖科技、金融、健康、体育、文化、科学等多个领域。
-
-chart_type: 必须从以下49种图表类型中选择。请将这49种类型在3000个任务中尽可能均匀地循环分配。
-
+chart_type: 必须从以下49种图表类型中选择。请将这49种类型在1000个任务中尽可能均匀地循环分配。
 单图类型 (32种): bar, line, histogram, boxplot, violin, strip, line_with_confidence_interval, heatmap, scatter, pie, donut, funnel, waterfall, stacked_area, area, stacked_bar, percentage_stacked_bar, forest_plot, scatter_with_error_bars, contour, network, sankey, candlestick, gauge, word_cloud, calendar_heatmap, parallel_coordinates, radar, 3d_bar, treemap, sunburst, rose
-
 多子图类型 (17种): bar, line, scatter, histogram, boxplot, violin, strip, line_with_confidence_interval, area, stacked_area, stacked_bar, percentage_stacked_bar, scatter_with_error_bars, heatmap, funnel, waterfall, forest_plot
-
 task_type:
-
 如果 chart_type 是上述17种多子图类型之一，则此字段的值必须为 'facet'。
-
 否则，值必须为 'single'。
-
-renderer: 所有任务此字段的值都固定为 'matplotlib'。
-
+要求single:facet大概为4:1
+renderer: 值为 'matplotlib'或'seaborn',均匀分布。
 figsize: 所有任务此字段的值都固定为列表 [12, 8]。
-
-dpi: 为每个任务生成一个 100 到 300 之间（含边界）的随机整数。
+dpi: 为每个任务生成一个 100 到 300 之间（含边界）的随机整数.示例:tasks:
+- topic: "AI Model Performance Metrics for Forecasting, Faceted by Year"
+  domain: "Technology & Software"
+  chart_type: stacked_bar
+  figsize: [12, 8]
+  dpi: 236
+  renderer: matplotlib
+  task_type: "facet"
+- topic: "Historical Popularity of Programming Languages"
+  domain: "History"
+  chart_type: "rose"
+  figsize: [12, 8]
+  dpi: 196
+  renderer: "matplotlib"
+  task_type: "single"
