@@ -7,10 +7,10 @@ import os
 
 # 1. 输入的原始 dataset.json 文件完整路径
 # 提示: Windows路径建议在引号前加上 r，例如 r'C:\Users\YourName\Desktop\dataset.json'
-INPUT_FILE_PATH = r'D:\\桌面\\数据存储\dataset(1,20k)\dataset.json'
+INPUT_FILE_PATH = r'D:\\桌面\\数据存储\dataset(2,20k)\dataset.json'
 
 # 2. 用来存放抽样结果文件的目录路径
-OUTPUT_DIRECTORY = r'D:\\桌面\\数据存储\\dataset(1,20k)\samples'
+OUTPUT_DIRECTORY = r'D:\\桌面\\数据存储\\dataset(2,20k)\samples'
 
 # 3. 希望抽样的问答对数量
 SAMPLING_SIZE = 2000

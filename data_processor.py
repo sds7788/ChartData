@@ -25,27 +25,40 @@ def _get_y_axis_range(full_data: Dict[str, Any]) -> List[float] | None:
         min_val, max_val = min(all_values), max(all_values)
         # 增加一些边距
         padding = (max_val - min_val) * 0.1
+        # 处理 min_val 和 max_val 相等的情况
+        if padding == 0:
+            padding = abs(min_val) * 0.1 if min_val != 0 else 1
         return [min_val - padding, max_val + padding]
 
     elif chart_type in ['stacked_bar', 'stacked_area']:
         y_series = data.get('y_series', [])
         if not y_series or not y_series[0].get('values'): return None
         
-        series_data = np.array([s.get('values', []) for s in y_series])
+        # 过滤掉所有值为None的系列
+        series_data_list = [s.get('values', []) for s in y_series if any(v is not None for v in s.get('values', []))]
+        if not series_data_list: return None
+        series_data = np.array(series_data_list)
+
         stacked_sums = np.sum(series_data, axis=0)
         
         min_val = np.min([v for s in series_data for v in s if v is not None])
         max_val = np.max(stacked_sums)
         padding = (max_val - min_val) * 0.1
-        return [min_val, max_val + padding]
+        if padding == 0:
+            padding = abs(min_val) * 0.1 if min_val != 0 else 1
+        # 对于堆叠图，最小值通常是0或者数据中的负值
+        min_range = min(0, min_val)
+        return [min_range, max_val + padding]
         
     elif chart_type == 'boxplot' or chart_type == 'violin' or chart_type == 'strip':
         stat_data = data.get('statistical_data', {})
         if not stat_data or not stat_data.get('data_series'): return None
-        all_values = [item for sublist in stat_data.get('data_series', []) for item in sublist]
+        all_values = [item for sublist in stat_data.get('data_series', []) for item in sublist if item is not None]
         if not all_values: return None
         min_val, max_val = min(all_values), max(all_values)
         padding = (max_val - min_val) * 0.1
+        if padding == 0:
+            padding = abs(min_val) * 0.1 if min_val != 0 else 1
         return [min_val - padding, max_val + padding]
 
     return None
@@ -71,7 +84,6 @@ def create_chart_variations(full_chart_data: Dict[str, Any], total_versions: int
         print(f"  - 提示：图表类型 '{chart_type}' 不适合生成多复杂度版本，将只使用完整数据。")
         # 对于这些图表，只返回最原始、最完整的一个版本
         return [full_chart_data]
-    # --- 修改结束 ---
 
     variations = []
     
@@ -96,28 +108,50 @@ def create_chart_variations(full_chart_data: Dict[str, Any], total_versions: int
         
         # 计算每个版本应该增加多少“非核心”数据
         num_steps = total_versions - 1
-        items_to_add_per_step = len(non_relevant_indices) / num_steps if num_steps > 0 else 0
+        # 当非核心数据点为0时，即使需要多个版本，也无法生成中间版本
+        if not non_relevant_indices and num_steps > 0:
+             # 如果只有核心数据，那么所有版本都是一样的
+             variations.append(full_chart_data)
+        else:
+            items_to_add_per_step = len(non_relevant_indices) / num_steps if num_steps > 0 else 0
 
-        for i in range(num_steps):
-            current_data = copy.deepcopy(full_chart_data)
-            num_to_add = int(items_to_add_per_step * (i + 1))
-            
-            # 随机选择要添加的非核心数据
-            indices_to_add = random.sample(non_relevant_indices, min(num_to_add, len(non_relevant_indices)))
-            indices_to_include = sorted(list(set(relevant_indices + indices_to_add)))
+            for i in range(num_steps):
+                current_data = copy.deepcopy(full_chart_data)
+                # --- 【修改点 1】将 num_to_add 的计算从 int() 改为 round() ---
+                # 使用 round() 可以更均匀地分布数据点，避免在前期因 int() 向下取整而长时间为0。
+                num_to_add = round(items_to_add_per_step * (i + 1))
+                
+                # 随机选择要添加的非核心数据
+                indices_to_add = random.sample(non_relevant_indices, min(num_to_add, len(non_relevant_indices)))
+                indices_to_include = sorted(list(set(relevant_indices + indices_to_add)))
 
-            # 根据图表类型，筛选数据
-            if chart_type in ['line', 'bar', 'stacked_bar', 'stacked_area', 'line_with_confidence_interval']:
-                current_data['data']['y_series'] = [data_source[j] for j in indices_to_include]
-            elif chart_type in ['scatter', 'scatter_with_error_bars']:
-                current_data['data']['scatter_points'] = [data_source[j] for j in indices_to_include]
-            elif chart_type in ['boxplot', 'violin', 'strip']:
-                full_stat_data = full_chart_data['data']['statistical_data']
-                current_stat_data = current_data['data']['statistical_data']
-                current_stat_data['categories'] = [full_stat_data['categories'][j] for j in indices_to_include]
-                current_stat_data['data_series'] = [full_stat_data['data_series'][j] for j in indices_to_include]
-            
-            variations.append(current_data)
+                # 根据图表类型，筛选数据
+                if chart_type in ['line', 'bar', 'stacked_bar', 'stacked_area', 'line_with_confidence_interval']:
+                    current_data['data']['y_series'] = [data_source[j] for j in indices_to_include]
+                elif chart_type in ['scatter', 'scatter_with_error_bars']:
+                    current_data['data']['scatter_points'] = [data_source[j] for j in indices_to_include]
+                elif chart_type in ['boxplot', 'violin', 'strip']:
+                    full_stat_data = full_chart_data['data']['statistical_data']
+                    current_stat_data = current_data['data']['statistical_data']
+                    current_stat_data['categories'] = [full_stat_data['categories'][j] for j in indices_to_include]
+                    current_stat_data['data_series'] = [full_stat_data['data_series'][j] for j in indices_to_include]
+                
+                # --- 【修改点 2】关键检查：在添加变体前，确认其不为空 ---
+                # 检查生成的变体是否包含有效数据，防止生成空的图表。
+                is_empty = False
+                if chart_type in ['line', 'bar', 'stacked_bar', 'stacked_area', 'line_with_confidence_interval']:
+                    if not current_data['data']['y_series']:
+                        is_empty = True
+                elif chart_type in ['scatter', 'scatter_with_error_bars']:
+                    if not current_data['data']['scatter_points']:
+                        is_empty = True
+                elif chart_type in ['boxplot', 'violin', 'strip']:
+                    if not current_data['data']['statistical_data']['categories']:
+                        is_empty = True
+                
+                if not is_empty:
+                    variations.append(current_data)
+                # --- 修改结束 ---
 
     variations.append(full_chart_data)
 

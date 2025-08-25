@@ -1,0 +1,97 @@
+简单
+You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'. This JSON object must include the data, a question, an answer, and evidence annotation.
+Please strictly follow the steps and requirements below:
+1.  **Generate Chart Data**:
+    * Create a dataset containing 4 to 6 main data objects.
+    * The data structure should be clear, easy to understand, and suitable for a {chart_type}.
+2.  **Generate a Question about the Chart**:
+    * Ask a question that can be answered by directly locating a single data point or making a simple comparison of values in the chart. For example, "Which object has the highest/lowest value?" or "What is the value of object A?".
+3.  **Provide a Clear and Concise Answer**:
+    * Clearly state the answer to the question based on the data you generated. The answer can only be a noun, number, or phrase.
+4.  **Identify and Annotate the Core Evidence**:
+    * In your final JSON output, review your question and answer.
+    * Identify the "minimum necessary data subset" required to answer the question.
+    * Set the `is_relevant_for_answer` field to `true` ONLY for this minimum subset of data points.
+    * All other data points not directly used to derive the answer must have this field set to `false`.
+
+中等
+You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'. This JSON object must include the data, a question, an answer, and evidence annotation.
+Please strictly follow the steps and requirements below:
+1.  **Generate Chart Data**:
+    * Create a dataset containing 4 to 6 main data objects.
+    * The data can include multiple dimensions or categories to add some complexity.
+2.  **Generate a Question about the Chart**:
+    * Ask a question that requires calculations involving multiple data points (e.g., sum, average, difference) or a comparison of aggregated information. For example, "What is the total sum of categories A, B, and E?" or "What is the difference between the average values of category X and category Y?".
+3.  **Provide a Clear and Concise Answer**:
+    * Clearly state the answer to the question based on the data you generated. The answer can only be a noun, number, or phrase.
+4.  **Identify and Annotate the Core Evidence**:
+    * In your final JSON output, review your question and answer.
+    * Identify the "minimum necessary data subset" required to answer the question. For a medium-difficulty question, this typically includes all data points involved in the calculation or comparison.
+    * Set the `is_relevant_for_answer` field to `true` ONLY for this minimum subset of data points.
+    * All other data points not directly used to derive the answer must have this field set to `false`.
+
+困难
+You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'. This JSON object must include the data, a question, an answer, and evidence annotation.
+Please strictly follow the steps and requirements below:
+1.  **Generate Chart Data**:
+    * Create a dataset containing 7 to 9 main data objects, where the data should have multiple attributes (e.g., name, category, time, value).
+    * Design the data to reveal a certain trend, pattern, or anomaly.
+2.  **Generate a Question about the Chart**:
+    * Ask a complex question that requires comprehensive analysis, trend identification, or filtering and reasoning based on multiple conditions. For example, "Which regions had sales exceeding 140 and also showed growth compared to the previous year?" or "Which category's total sum exceeds the sum of all other categories?".
+3.  **Provide a Clear and Concise Answer**:
+    * Clearly state the answer to the question based on the data you generated. The answer can only be a noun, number, or phrase.
+4.  **Identify and Annotate the Core Evidence**:
+    * In your final JSON output, review your question and answer.
+    * Identify the "minimum necessary data subset" required to answer the question. This may involve data from multiple categories or time points used for trend calculation, multi-condition filtering, or global comparison.
+    * Set the `is_relevant_for_answer` field to `true` ONLY for this minimum subset of data points.
+    * All other data points not directly used to derive the answer must have this field set to `false`.
+
+
+DATA_PROMPTS = {
+    "简单": """
+    You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+    Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'.
+    
+    **Data Generation Requirements:**
+    * [cite_start]Create a dataset containing 4 to 6 main data objects. [cite: 4]
+    * [cite_start]The data structure should be clear, easy to understand, and suitable for a {chart_type}. [cite: 5]
+    """,
+    "中等": """
+    You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+    Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'.
+    
+    **Data Generation Requirements:**
+    * [cite_start]Create a dataset containing 4 to 6 main data objects. [cite: 17]
+    * [cite_start]The data can include multiple dimensions or categories to add some complexity. [cite: 18]
+    """,
+    "困难": """
+    You are an expert in the field of {knowledge_domain}, specializing in data analysis.
+    Your task is to generate a JSON object for a {chart_type} chart on the topic of '{topic}'.
+    
+    **Data Generation Requirements:**
+    * [cite_start]Create a dataset containing 7 to 9 main data objects, where the data should have multiple attributes (e.g., name, category, time, value). [cite: 32]
+    * [cite_start]Design the data to reveal a certain trend, pattern, or anomaly. [cite: 33]
+    """
+}
+
+# --- 阶段二：问答生成提示 (只包含提问指令) ---
+QA_PROMPTS = {
+    "简单": """
+    **Question Generation Requirements:**
+    * [cite_start]Ask a question that can be answered by directly locating a single data point or making a simple comparison of values in the chart. [cite: 6]
+    * [cite_start]For example, "Which object has the highest/lowest value?" or "What is the value of object A?". [cite: 7]
+    """,
+    "中等": """
+    **Question Generation Requirements:**
+    * [cite_start]Ask a question that requires calculations involving multiple data points (e.g., sum, average, difference) or a comparison of aggregated information. [cite: 19]
+    * [cite_start]For example, "What is the total sum of categories A, B, and E?" or "What is the difference between the average values of category X and category Y?". [cite: 20, 21]
+    """,
+    "困难": """
+    **Question Generation Requirements:**
+    * [cite_start]Ask a complex question that requires comprehensive analysis, trend identification, or filtering and reasoning based on multiple conditions. [cite: 34]
+    * [cite_start]For example, "Which regions had sales exceeding 140 and also showed growth compared to the previous year?" or "Which category's total sum exceeds the sum of all other categories?". [cite: 35, 36]
+    """
+}

@@ -21,11 +21,11 @@ api_keys = [
 MODEL_NAME = "qwen2.5-vl-72b-instruct"
 
 # 定义你的基准测试JSON文件路径
-benchmark_json_file = "D:\桌面\数据存储\\dataset(1,20k)\\sampled_dataset_2000.json"
+benchmark_json_file = "D:\桌面\数据存储\\dataset(2,20k)\\sampled_dataset_2000.json"
 # 定义存放图片的文件夹路径
-image_directory = "D:\桌面\数据存储\dataset(1,20k)\images"
+image_directory = "D:\桌面\数据存储\dataset(2,20k)\images"
 # 最终输出的JSON文件名
-output_json_file = "D:\桌面\数据存储\dataset(1,20k)\eva.json" # 建议使用新文件名以区分不同模型的结果
+output_json_file = "D:\桌面\数据存储\dataset(2,20k)\eva.json" # 建议使用新文件名以区分不同模型的结果
 
 # 每个Key允许的调用次数（为保险起见，可设置比API限制略低的次数）
 CALLS_PER_KEY = 9800 # Dashscope的QPS限制通常更灵活，但保留此机制用于多Key轮转

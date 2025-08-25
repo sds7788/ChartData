@@ -178,28 +178,58 @@ class ChartSpecificData(BaseModel):
 class Analysis(BaseModel):
     question: str = Field(..., description="An insightful question based on the generated data.")
     answer: str = Field(..., description="A concise and direct answer to the question.")
-    relevance_reasoning: str = Field(..., description="An explanation of why the data marked as 'relevant' is necessary and sufficient to answer the question.")
 
-# --- 【NEW】Schema for Single Plot Charts ---
-class SingleChartData(BaseModel):
+
+# # --- 【NEW】Schema for Single Plot Charts ---
+# class SingleChartData(BaseModel):
+#     chart_type: str = Field(..., description="The specific type of the chart.")
+#     title: str = Field(..., description="The title of the chart.")
+#     x_label: Optional[str] = Field(None, description="Label for the X-axis.")
+#     y_label: Optional[str] = Field(None, description="Label for the Y-axis.")
+#     data: ChartSpecificData = Field(..., description="A container for all the data for the chart.")
+#     analysis: Analysis = Field(..., description="A question-and-answer analysis based on the chart data.")
+
+# # --- 【NEW】Schema for Faceted (Multi-Plot) Charts ---
+# class FacetData(BaseModel):
+#     """Defines the data for a single subplot (facet)."""
+#     facet_value: str = Field(..., description="The value of the facet this subplot represents, e.g., 'North America' or 'Male'.")
+#     data: ChartSpecificData = Field(..., description="The specific data for the chart in this facet.")
+
+# class FacetChartData(BaseModel):
+#     chart_type: str = Field(..., description="The specific type of the chart.")
+#     title: str = Field(..., description="The overall title for the faceted chart display.")
+#     x_label: Optional[str] = Field(None, description="Common label for the X-axis across all subplots.")
+#     y_label: Optional[str] = Field(None, description="Common label for the Y-axis across all subplots.")
+#     facet_by: str = Field(..., description="The field name used for faceting, e.g., 'Region'.")
+#     facet_data: List[FacetData] = Field(..., description="A list of data for generating faceted subplots.")
+#     analysis: Analysis = Field(..., description="A question-and-answer analysis based on the overall chart data.")
+class BaseChartData(BaseModel):
+    """不包含分析部分的基础图表数据结构。"""
     chart_type: str = Field(..., description="The specific type of the chart.")
     title: str = Field(..., description="The title of the chart.")
     x_label: Optional[str] = Field(None, description="Label for the X-axis.")
     y_label: Optional[str] = Field(None, description="Label for the Y-axis.")
     data: ChartSpecificData = Field(..., description="A container for all the data for the chart.")
-    analysis: Analysis = Field(..., description="A question-and-answer analysis based on the chart data.")
 
-# --- 【NEW】Schema for Faceted (Multi-Plot) Charts ---
 class FacetData(BaseModel):
     """Defines the data for a single subplot (facet)."""
     facet_value: str = Field(..., description="The value of the facet this subplot represents, e.g., 'North America' or 'Male'.")
     data: ChartSpecificData = Field(..., description="The specific data for the chart in this facet.")
 
-class FacetChartData(BaseModel):
+class BaseFacetChartData(BaseModel):
+    """不包含分析部分的基础分面图表数据结构。"""
     chart_type: str = Field(..., description="The specific type of the chart.")
     title: str = Field(..., description="The overall title for the faceted chart display.")
     x_label: Optional[str] = Field(None, description="Common label for the X-axis across all subplots.")
     y_label: Optional[str] = Field(None, description="Common label for the Y-axis across all subplots.")
     facet_by: str = Field(..., description="The field name used for faceting, e.g., 'Region'.")
     facet_data: List[FacetData] = Field(..., description="A list of data for generating faceted subplots.")
+
+# --- 【修改】让原有的 Schema 继承基类并添加 "analysis" ---
+class SingleChartData(BaseChartData):
+    """用于单个图表的完整数据结构，包含分析部分。"""
+    analysis: Analysis = Field(..., description="A question-and-answer analysis based on the chart data.")
+
+class FacetChartData(BaseFacetChartData):
+    """用于分面图表的完整数据结构，包含分析部分。"""
     analysis: Analysis = Field(..., description="A question-and-answer analysis based on the overall chart data.")

@@ -13,7 +13,7 @@ class GeminiClient:
     一个封装了与Google Gemini API交互的客户端类。
     此版本已更新，以使用最新的`client.generate_content`和`generation_config`方法。
     """
-    def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash-lite"):
         """
         初始化客户端，配置API密钥和模型。
 
@@ -75,7 +75,7 @@ class GeminiClient:
             c.Subtle Correlations: The internal relationships and correlations within the data must be subtle, non-linear, and multi-dimensional. They should not be immediately obvious and should require deep exploration of the chart to be discovered.
         2.Ask a Challenging Question: Based on the dataset you generated, formulate a challenging analytical question that requires careful interpretation of complex relationships within a chart, rather than simple data retrieval. The following options are available: 
             a. The question should require 2-5 steps of reasoning to solve. 
-            b. Ask about mathematical operations (differences, percentages, ratios) between data elements. 
+            b. Ask about mathematical operations between data elements. 
             c. Focus on identifying patterns, extreme values, or anomalies in the data visualization. 
             d. Include questions about the relationships between different data points or series.
         3.Provide clear answers: Please provide clear and concise answers to your questions. The answer must be concise, such as a noun or a number or a year, etc.

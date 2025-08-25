@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Type, List, Any
 from collections import defaultdict
 
-from config import GEMINI_API_KEYS
+from gemini_config import GEMINI_API_KEYS
 from gemini_client import GeminiClient
 from schemas import SingleChartData, FacetChartData
 from data_processor import create_chart_variations
@@ -30,7 +30,7 @@ GENERATOR_MAP: Dict[str, Type[BaseChartGenerator]] = {
 # 一轮任务结束后，等待多少秒再开始下一轮
 LOOP_DELAY_SECONDS = 60
 # 输出目录
-OUTPUT_DIR = "output"
+OUTPUT_DIR = "gemini_output"
 
 # --- 新增：熔断机制配置 ---
 FAILURE_THRESHOLD = 5  # 5次失败触发熔断
@@ -186,7 +186,6 @@ def process_task(task: Dict[str, Any], client_queue: queue.Queue):
             "qa_pair": {
                 "question": full_chart_data.get('analysis', {}).get('question'),
                 "answer": full_chart_data.get('analysis', {}).get('answer'),
-                "relevance_reasoning": full_chart_data.get('analysis', {}).get('relevance_reasoning'),
             },
             "source_data_annotated": full_chart_data,
             "generated_charts": generated_files
